@@ -292,7 +292,7 @@ let Render = function () {
       PutPixel(x, y, Clamp(color));
     }
   }
-  console.log(workers)
+//   console.log(workers)
   UpdateCanvas();
 }
 
