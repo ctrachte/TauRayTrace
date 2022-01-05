@@ -48,9 +48,6 @@
     "updater": {
       "active": false
     },
-    "allowlist": {
-      "all": true
-    },
     "windows": [
       {
         "title": "TauRay Tracing",

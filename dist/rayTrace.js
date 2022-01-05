@@ -308,7 +308,7 @@ Render();
 // setInterval(Render, 1);
 
 // keypress listener for red sphere movement. 
-window.addEventListener("keydown", function (e) {
+window.addEventListener("keyup", function (e) {
   let keypress = e.key;
   switch (keypress) {
     case "w":
