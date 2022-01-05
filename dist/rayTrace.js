@@ -4,14 +4,14 @@
 //  Low-level canvas access.
 // ======================================================================
 
-let canvas = document.getElementById("canvas");
-let canvas_context = canvas.getContext("2d");
-let canvas_buffer = canvas_context.getImageData(0, 0, canvas.width, canvas.height);
-let canvas_pitch = canvas_buffer.width * 4;
+const canvas = document.getElementById("canvas");
+const canvas_context = canvas.getContext("2d");
+const canvas_buffer = canvas_context.getImageData(0, 0, canvas.width, canvas.height);
+const canvas_pitch = canvas_buffer.width * 4;
 
 
 // The PutPixel() function.
-let PutPixel = function (x, y, color) {
+const PutPixel = function (x, y, color) {
   x = canvas.width / 2 + x;
   y = canvas.height / 2 - y - 1;
 
@@ -28,12 +28,12 @@ let PutPixel = function (x, y, color) {
 
 
 // Displays the contents of the offscreen buffer into the canvas.
-let UpdateCanvas = function () {
+const UpdateCanvas = function () {
   canvas_context.putImageData(canvas_buffer, 0, 0);
 }
 
 
-let ClearAll = function () {
+const ClearAll = function () {
   canvas.width = canvas.width;
 }
 
@@ -43,40 +43,40 @@ let ClearAll = function () {
 // ======================================================================
 
 // Conceptually, an "infinitesimaly small" real number.
-let EPSILON = 0.0001;
+const EPSILON = 0.0001;
 
 // Dot product of two 3D vectors.
-let DotProduct = function (v1, v2) {
+const DotProduct = function (v1, v2) {
   return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
 
 
 // Length of a 3D vector.
-let Length = function (vec) {
+const Length = function (vec) {
   return Math.sqrt(DotProduct(vec, vec));
 }
 
 
 // Computes k * vec.
-let Multiply = function (k, vec) {
+const Multiply = function (k, vec) {
   return [k * vec[0], k * vec[1], k * vec[2]];
 }
 
 
 // Computes v1 + v2.
-let Add = function (v1, v2) {
+const Add = function (v1, v2) {
   return [v1[0] + v2[0], v1[1] + v2[1], v1[2] + v2[2]];
 }
 
 
 // Computes v1 - v2.
-let Subtract = function (v1, v2) {
+const Subtract = function (v1, v2) {
   return [v1[0] - v2[0], v1[1] - v2[1], v1[2] - v2[2]];
 }
 
 
 // Clamps a color to the canonical color range.
-let Clamp = function (vec) {
+const Clamp = function (vec) {
   return [Math.min(255, Math.max(0, vec[0])),
   Math.min(255, Math.max(0, vec[1])),
   Math.min(255, Math.max(0, vec[2]))];
@@ -84,7 +84,7 @@ let Clamp = function (vec) {
 
 
 // Computes the reflection of v1 respect to v2.
-let ReflectRay = function (v1, v2) {
+const ReflectRay = function (v1, v2) {
   return Subtract(Multiply(2 * DotProduct(v1, v2), v2), v1);
 }
 
@@ -94,7 +94,7 @@ let ReflectRay = function (v1, v2) {
 // ======================================================================
 
 // A Sphere.
-let Sphere = function (center, radius, color, specular, reflective) {
+const Sphere = function (center, radius, color, specular, reflective) {
   this.center = center;
   this.radius = radius;
   this.color = color;
@@ -103,7 +103,7 @@ let Sphere = function (center, radius, color, specular, reflective) {
 }
 
 // A Light.
-let Light = function (ltype, intensity, position) {
+const Light = function (ltype, intensity, position) {
   this.ltype = ltype;
   this.intensity = intensity;
   this.position = position;
@@ -114,24 +114,24 @@ Light.POINT = 1;
 Light.DIRECTIONAL = 2;
 
 // Scene setup.
-let viewport_size = 1;
-let projection_plane_z = 1;
-let camera_position = [0, 0, 0];
-let background_color = [200, 200, 200];
-let spheres = [new Sphere([0, -1, 3], 1, [255, 0, 0], 50, 0.2),
+const viewport_size = 1;
+const projection_plane_z = 1;
+const camera_position = [0, 0, 0];
+const background_color = [200, 200, 200];
+const spheres = [new Sphere([0, -1, 3], 1, [255, 0, 0], 50, 0.2),
 new Sphere([-2, 0, 4], 1, [0, 255, 0], 10, 0.4),
 new Sphere([2, 0, 4], 1, [0, 0, 255], 500, 0.3),
 new Sphere([0, -5001, 0], 5000, [255, 255, 0], 700, 0.1)];
 
-let lights = [
+const lights = [
   new Light(Light.AMBIENT, 0.2),
   new Light(Light.POINT, 0.6, [2, 1, 0]),
   new Light(Light.DIRECTIONAL, 0.2, [1, 4, 4])
 ];
 
-let recursion_depth = 100;
+const recursion_depth = 100;
 
-let updateRecursionLimit = function () {
+const updateRecursionLimit = function () {
   let v = document.getElementById("rec-limit").value | 0;
   if (v < 0) {
     v = 0;
@@ -148,7 +148,7 @@ let updateRecursionLimit = function () {
 }
 
 // Converts 2D canvas coordinates to 3D viewport coordinates.
-let CanvasToViewport = function (p2d) {
+const CanvasToViewport = function (p2d) {
   return [p2d[0] * viewport_size / canvas.width,
   p2d[1] * viewport_size / canvas.height,
     projection_plane_z];
@@ -156,7 +156,7 @@ let CanvasToViewport = function (p2d) {
 
 // Computes the intersection of a ray and a sphere. Returns the values
 // of t for the intersections.
-let IntersectRaySphere = function (origin, direction, sphere) {
+const IntersectRaySphere = function (origin, direction, sphere) {
   let oc = Subtract(origin, sphere.center);
 
   let k1 = DotProduct(direction, direction);
@@ -174,7 +174,7 @@ let IntersectRaySphere = function (origin, direction, sphere) {
 }
 
 
-let ComputeLighting = function (point, normal, view, specular) {
+const ComputeLighting = function (point, normal, view, specular) {
   let intensity = 0;
   let length_n = Length(normal);  // Should be 1.0, but just in case...
   let length_v = Length(view);
@@ -228,7 +228,7 @@ let ComputeLighting = function (point, normal, view, specular) {
 
 
 // Find the closest intersection between a ray and the spheres in the scene.
-let ClosestIntersection = function (origin, direction, min_t, max_t) {
+const ClosestIntersection = function (origin, direction, min_t, max_t) {
   let closest_t = Infinity;
   let closest_sphere = null;
 
@@ -253,7 +253,7 @@ let ClosestIntersection = function (origin, direction, min_t, max_t) {
 
 
 // Traces a ray against the set of spheres in the scene.
-let TraceRay = function (origin, direction, min_t, max_t, depth) {
+const TraceRay = function (origin, direction, min_t, max_t, depth) {
   let intersection = ClosestIntersection(origin, direction, min_t, max_t);
   if (!intersection) {
     return background_color;
@@ -282,7 +282,7 @@ let TraceRay = function (origin, direction, min_t, max_t, depth) {
 }
 
 
-let Render = function () {
+const Render = function () {
   ClearAll();
   // Main loop.
   for (let x = -canvas.width / 2; x < canvas.width / 2; x++) {
@@ -308,7 +308,7 @@ Render();
 // setInterval(Render, 1);
 
 // keypress listener for red sphere movement. 
-window.addEventListener("keyup", function (e) {
+window.addEventListener("keydown", function (e) {
   let keypress = e.key;
   switch (keypress) {
     case "w":
